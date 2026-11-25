@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  --color-timber-dark: #2f2219;
+  --color-timber-warm: #5c4028;
+  --color-timber-mid: #8b6747;
+  --color-timber-light: #e7d8c3;
+  --color-parchment: #fbf6ee;
+
+  --color-brass-gold: #c98a2c;
+  --color-brass-dark: #8f5c14;
+  --color-brass-light: #f6e3ba;
+
+  --color-pine-deep: #1e4d3b;
+  --color-pine-mid: #2f6f54;
+  --color-pine-soft: #dcece3;
+
+  --color-sky-beacon: #2b7bba;
+  --color-sky-soft: #d9ecfa;
+  --color-sky-mist: #f2f7fa;
+
+  --font-display: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --font-sans: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    letter-spacing: 0.02em;
+  }
+}
+
+@keyframes signal-wave {
+  0% {
+    transform: scale(0.75);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+.animate-signal-wave {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: signal-wave 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+.animate-signal-wave-delayed {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: signal-wave 2.2s cubic-bezier(0.22, 1, 0.36, 1) 1.1s infinite;
+}
+
+@layer utilities {
+  .wood-panel {
+    background-color: var(--color-parchment);
+    border: 2px solid var(--color-timber-light);
+    box-shadow: 0 4px 0 0 #d5c2a6, 0 8px 20px -6px rgba(47, 34, 25, 0.12);
+  }
+
+  .brass-plate {
+    background: linear-gradient(180deg, #f9ebd0 0%, #edd19a 100%);
+    border: 2px solid var(--color-brass-gold);
+    box-shadow: 0 3px 0 0 var(--color-brass-dark);
+  }
+
+  .tactile-btn {
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+  .tactile-btn:active:not(:disabled) {
+    transform: translateY(2px);
+  }
+}
