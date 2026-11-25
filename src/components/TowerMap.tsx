@@ -89,12 +89,12 @@ export function TowerMap({
                     </div>
 
                     {isRepaired ? (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-pine-soft px-2.5 py-1 text-xs font-bold text-pine-deep">
+                      <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-pine-soft px-2.5 py-1 text-xs font-bold text-pine-deep">
                         <CheckCircle2 className="h-3.5 w-3.5" />
                         Online
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-sky-soft px-2.5 py-1 text-xs font-bold text-sky-beacon">
+                      <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-sky-soft px-2.5 py-1 text-xs font-bold text-sky-beacon">
                         <Radio className="h-3.5 w-3.5" />
                         Needs Repair
                       </span>

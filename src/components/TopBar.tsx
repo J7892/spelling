@@ -1,4 +1,4 @@
-import { Radio, Flame, Wrench, ClipboardList, Compass } from 'lucide-react';
+import { Radio, Flame, Wrench, ClipboardList } from 'lucide-react';
 
 export type AppView = 'map' | 'practice' | 'workshop' | 'progress';
 
@@ -45,14 +45,14 @@ export function TopBar({
         </button>
 
         {/* Status Gauges + Navigation */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
           {/* Towers Repaired Gauge */}
           <div
-            className="flex items-center gap-2 rounded-xl border-2 border-pine-mid bg-pine-deep/90 px-3 py-1.5 text-sm"
+            className="flex items-center gap-1.5 whitespace-nowrap rounded-xl border-2 border-pine-mid bg-pine-deep/90 px-3 py-1.5 text-sm"
             title="Towers Repaired"
           >
             <Radio className="h-4 w-4 text-sky-soft" />
-            <span className="hidden text-xs font-medium text-pine-soft sm:inline">
+            <span className="hidden text-xs font-medium text-pine-soft md:inline">
               Towers Repaired:
             </span>
             <span className="font-bold text-white">
@@ -62,32 +62,20 @@ export function TopBar({
 
           {/* Current Streak Gauge */}
           <div
-            className="flex items-center gap-1.5 rounded-xl border-2 border-brass-gold bg-timber-warm px-3 py-1.5 text-sm"
+            className="flex items-center gap-1.5 whitespace-nowrap rounded-xl border-2 border-brass-gold bg-timber-warm px-3 py-1.5 text-sm"
             title="Current Streak"
           >
             <Flame className="h-4 w-4 text-brass-light" />
-            <span className="hidden text-xs font-medium text-brass-light sm:inline">
+            <span className="hidden text-xs font-medium text-brass-light md:inline">
               Current Streak:
             </span>
             <span className="font-bold text-white">{currentStreak}</span>
           </div>
 
-          {/* Navigation Buttons */}
-          {currentView !== 'map' && (
-            <button
-              type="button"
-              onClick={() => onNavigate('map')}
-              className="tactile-btn flex items-center gap-1.5 rounded-xl border-2 border-sky-beacon bg-sky-beacon px-3 py-1.5 text-xs font-semibold text-white shadow-[0_2px_0_0_#1b5380] hover:bg-sky-beacon/90 sm:text-sm"
-            >
-              <Compass className="h-4 w-4" />
-              <span>Tower Map</span>
-            </button>
-          )}
-
           <button
             type="button"
             onClick={() => onNavigate('workshop')}
-            className={`tactile-btn flex items-center gap-1.5 rounded-xl border-2 px-3 py-1.5 text-xs font-semibold sm:text-sm ${
+            className={`tactile-btn flex items-center gap-1.5 whitespace-nowrap rounded-xl border-2 px-3 py-1.5 text-xs font-semibold sm:text-sm ${
               currentView === 'workshop'
                 ? 'border-brass-light bg-brass-gold text-timber-dark shadow-[0_2px_0_0_#8f5c14]'
                 : 'border-timber-mid bg-timber-warm text-parchment shadow-[0_2px_0_0_#1e1510] hover:bg-timber-mid/40'
@@ -100,7 +88,7 @@ export function TopBar({
           <button
             type="button"
             onClick={() => onNavigate('progress')}
-            className={`tactile-btn flex items-center gap-1.5 rounded-xl border-2 px-3 py-1.5 text-xs font-semibold sm:text-sm ${
+            className={`tactile-btn flex items-center gap-1.5 whitespace-nowrap rounded-xl border-2 px-3 py-1.5 text-xs font-semibold sm:text-sm ${
               currentView === 'progress'
                 ? 'border-brass-light bg-brass-gold text-timber-dark shadow-[0_2px_0_0_#8f5c14]'
                 : 'border-timber-mid bg-timber-warm text-parchment shadow-[0_2px_0_0_#1e1510] hover:bg-timber-mid/40'

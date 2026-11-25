@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, FormEvent, KeyboardEvent } from 'react';
 import {
+  AlertTriangle,
   ArrowLeft,
   ArrowRight,
   CheckCircle2,
@@ -417,6 +418,8 @@ export function GameArena({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    if (weldedSuccess) return;
+
     const result = validateSpellingAttempt(input, currentPuzzle.entry);
     if (result.category === 'empty') return;
 
@@ -798,6 +801,7 @@ export function GameArena({
                 ref={inputRef}
                 type="text"
                 value={input}
+                disabled={weldedSuccess}
                 onChange={(e) => {
                   setInput(e.target.value);
                   playSound('keystroke');
@@ -808,11 +812,12 @@ export function GameArena({
                 autoCapitalize="none"
                 spellCheck={false}
                 placeholder="Type your answer and press Enter..."
-                className="flex-1 rounded-xl border-2 border-timber-mid bg-white px-4 py-3 font-sans text-lg font-semibold text-timber-dark placeholder:text-timber-mid/60 focus:border-sky-beacon focus:outline-none"
+                className="flex-1 rounded-xl border-2 border-timber-mid bg-white px-4 py-3 font-sans text-lg font-semibold text-timber-dark placeholder:text-timber-mid/60 focus:border-sky-beacon focus:outline-none disabled:opacity-60"
               />
               <button
                 type="submit"
-                className="tactile-btn rounded-xl border-2 border-pine-deep bg-pine-mid px-6 py-3 text-base font-bold text-white shadow-[0_3px_0_0_#1e4d3b] hover:bg-pine-deep"
+                disabled={weldedSuccess}
+                className="tactile-btn rounded-xl border-2 border-pine-deep bg-pine-mid px-6 py-3 text-base font-bold text-white shadow-[0_3px_0_0_#1e4d3b] hover:bg-pine-deep disabled:opacity-60"
               >
                 Check (Enter)
               </button>
@@ -829,7 +834,11 @@ export function GameArena({
                 : 'border-brass-dark bg-brass-light text-timber-dark'
             }`}
           >
-            <CheckCircle2 className="h-5 w-5 shrink-0" />
+            {feedback.type === 'correct' ? (
+              <CheckCircle2 className="h-5 w-5 shrink-0 text-pine-deep" />
+            ) : (
+              <AlertTriangle className="h-5 w-5 shrink-0 text-brass-dark" />
+            )}
             <span>{feedback.message}</span>
           </div>
         )}

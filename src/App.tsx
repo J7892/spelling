@@ -17,6 +17,8 @@ export function App() {
   const [activeCustomListId, setActiveCustomListId] = useState<string | null>(
     null
   );
+  const [sessionWords, setSessionWords] = useState<WordEntry[]>([]);
+  const [sessionKey, setSessionKey] = useState(0);
 
   const {
     progress,
@@ -64,11 +66,17 @@ export function App() {
     setPendingRuleZone(null);
     setActiveCustomListId(null);
     setActiveZoneId(zone.id);
+    setSessionWords(getWordsForZoneSession(zone.id, CURRICULUM_WORDS));
+    setSessionKey((k) => k + 1);
     setView('practice');
   };
 
   const handleSelectCustomList = (listId: string) => {
+    const found = customLists.find((l) => l.id === listId);
+    if (!found) return;
     setActiveCustomListId(listId);
+    setSessionWords(found.words);
+    setSessionKey((k) => k + 1);
     setView('practice');
   };
 
@@ -76,11 +84,6 @@ export function App() {
   const activeCustomList = activeCustomListId
     ? customLists.find((l) => l.id === activeCustomListId)
     : undefined;
-
-  const sessionWords = useMemo(() => {
-    if (activeCustomList) return activeCustomList.words;
-    return getWordsForZoneSession(activeZoneId, CURRICULUM_WORDS);
-  }, [activeCustomList, activeZoneId, getWordsForZoneSession]);
 
   return (
     <div className="min-h-screen bg-sky-mist text-timber-dark">
@@ -106,9 +109,10 @@ export function App() {
 
         {view === 'practice' && activeCustomList && (
           <GameArena
+            key={sessionKey}
             title={activeCustomList.title}
             subtitle={`Special Delivery Tower • ${activeCustomList.createdBy}`}
-            words={activeCustomList.words}
+            words={sessionWords}
             onRecordAttempt={(word, attempt, isCorrect, hint, isFirstTry) =>
               recordAttempt(
                 word,
@@ -125,6 +129,7 @@ export function App() {
 
         {view === 'practice' && !activeCustomList && activeZone && (
           <GameArena
+            key={sessionKey}
             title={activeZone.name}
             subtitle={activeZone.subtitle}
             zone={activeZone}

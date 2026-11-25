@@ -119,48 +119,7 @@ export function useGameStore() {
       const nextStreak = isCorrect ? prevProg.currentStreak + 1 : 0;
       const nextBestStreak = Math.max(prevProg.bestStreak, nextStreak);
 
-      const nextMastered =
-        isCorrect && !prevProg.masteredWords.includes(wordEntry.word)
-          ? [...prevProg.masteredWords, wordEntry.word]
-          : prevProg.masteredWords;
-
-      const nextZoneWordsCompleted =
-        isCorrect && !currentZoneRec.wordsCompleted.includes(wordEntry.word)
-          ? [...currentZoneRec.wordsCompleted, wordEntry.word]
-          : currentZoneRec.wordsCompleted;
-
-      const isZoneRepaired =
-        currentZoneRec.repaired ||
-        (zoneWordsCount > 0 && nextZoneWordsCompleted.length >= zoneWordsCount);
-
-      const nextZoneProgress = {
-        ...prevProg.zoneProgress,
-        [zoneId]: {
-          repaired: isZoneRepaired,
-          wordsCompleted: nextZoneWordsCompleted,
-          attempts: currentZoneRec.attempts + 1,
-          correctCount: currentZoneRec.correctCount + (isCorrect ? 1 : 0),
-        },
-      };
-
-      const nextTowersRepaired = Object.values(nextZoneProgress).filter(
-        (z) => z.repaired
-      ).length;
-
-      const nextMistakes = isCorrect
-        ? prevProg.recentMistakes
-        : [
-            {
-              word: wordEntry.word,
-              attempt,
-              zoneId,
-              hintShown,
-              timestamp: new Date().toISOString(),
-            },
-            ...prevProg.recentMistakes,
-          ].slice(0, 30);
-
-      // Update Leitner Box WordMasteryRecord
+      // Update Leitner Box WordMasteryRecord first so masteredWords stays consistent with needsRepair
       const existingMastery: WordMasteryRecord = prev.wordMastery[wordKey] ?? {
         word: wordEntry.word,
         zoneId: wordEntry.zoneId,
@@ -212,6 +171,49 @@ export function useGameStore() {
         nextReviewDate,
         boxLevel: nextBox,
       };
+
+      const nextMastered =
+        isCorrect && !nextNeedsRepair
+          ? prevProg.masteredWords.includes(wordEntry.word)
+            ? prevProg.masteredWords
+            : [...prevProg.masteredWords, wordEntry.word]
+          : prevProg.masteredWords.filter((w) => w !== wordEntry.word);
+
+      const nextZoneWordsCompleted =
+        isCorrect && !currentZoneRec.wordsCompleted.includes(wordEntry.word)
+          ? [...currentZoneRec.wordsCompleted, wordEntry.word]
+          : currentZoneRec.wordsCompleted;
+
+      const isZoneRepaired =
+        currentZoneRec.repaired ||
+        (zoneWordsCount > 0 && nextZoneWordsCompleted.length >= zoneWordsCount);
+
+      const nextZoneProgress = {
+        ...prevProg.zoneProgress,
+        [zoneId]: {
+          repaired: isZoneRepaired,
+          wordsCompleted: nextZoneWordsCompleted,
+          attempts: currentZoneRec.attempts + 1,
+          correctCount: currentZoneRec.correctCount + (isCorrect ? 1 : 0),
+        },
+      };
+
+      const nextTowersRepaired = Object.values(nextZoneProgress).filter(
+        (z) => z.repaired
+      ).length;
+
+      const nextMistakes = isCorrect
+        ? prevProg.recentMistakes
+        : [
+            {
+              word: wordEntry.word,
+              attempt,
+              zoneId,
+              hintShown,
+              timestamp: new Date().toISOString(),
+            },
+            ...prevProg.recentMistakes,
+          ].slice(0, 30);
 
       return {
         ...prev,
